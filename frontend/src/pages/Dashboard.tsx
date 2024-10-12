@@ -1,7 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import Appbar from "../components/Appbar";
+import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../config";
+import axios from "axios";
 
 const ZapTable = () => {
+  const [zaps, setZaps] = useState([]);
+
+  useEffect(() => {
+    async function func() {
+      const res = await axios.get(`${BACKEND_URL}/api/v1/zap`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      setZaps(res.data.zaps);
+      console.log(res.data.zaps);
+    }
+
+    func();
+  }, []);
+
   return (
     <table className="border-collapse w-[60%] table-fixed">
       <thead>
@@ -13,12 +32,14 @@ const ZapTable = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td className="border-2 w-[40%] text-center py-1">abc124efghtyjdgsakghfkagfukg</td>
-          <td className="border-2 w-[20%] text-center py-1">1st Aug 2024</td>
-          <td className="border-2 w-[20%] text-center py-1">Yes</td>
-          <td className="border-2 w-[20%] text-center py-1 cursor-pointer hover:bg-slate-300">Go</td>
-        </tr>
+        {zaps.map((z) => (
+          <tr>
+            <td className="border-2 w-[40%] text-center py-1">{z.id}</td>
+            <td className="border-2 w-[20%] text-center py-1">Coming soon....</td>
+            <td className="border-2 w-[20%] text-center py-1">Coming soon....</td>
+            <td className="border-2 w-[20%] text-center py-1 cursor-pointer hover:bg-slate-300">Coming soon....</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
